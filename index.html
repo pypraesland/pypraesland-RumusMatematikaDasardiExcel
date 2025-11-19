@@ -1,0 +1,929 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materi Excel Interaktif</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      height: 100%;
+      overflow: hidden;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    .presentation-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .slide {
+      width: 100%;
+      height: 100%;
+      display: none;
+      flex-direction: column;
+      padding: 1.5%;
+      box-sizing: border-box;
+      animation: slideIn 0.5s ease-out;
+      overflow-y: auto;
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .slide-header {
+      text-align: center;
+      margin-bottom: 1%;
+      flex-shrink: 0;
+    }
+
+    .slide-title {
+      font-size: 1.8em;
+      font-weight: bold;
+      color: white;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+      margin: 0;
+      padding: 0.8% 2%;
+      background: rgba(255,255,255,0.15);
+      border-radius: 15px;
+      display: inline-block;
+    }
+
+    .slide-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 1%;
+      overflow-y: auto;
+      min-height: 0;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 1.5%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+
+    .operation-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5%;
+    }
+
+    .operation-card {
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      border-radius: 12px;
+      padding: 3%;
+      text-align: center;
+      color: white;
+      transition: transform 0.3s ease;
+    }
+
+    .operation-card:hover {
+      transform: scale(1.05);
+    }
+
+    .icon {
+      font-size: 2.2em;
+      margin-bottom: 2%;
+    }
+
+    .operation-name {
+      font-size: 1.1em;
+      font-weight: bold;
+      margin-bottom: 1.5%;
+    }
+
+    .operation-symbol {
+      font-size: 1.6em;
+      font-weight: bold;
+      background: rgba(255,255,255,0.3);
+      padding: 1.5% 3%;
+      border-radius: 8px;
+      display: inline-block;
+    }
+
+    .operator-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5%;
+    }
+
+    .operator-card {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      border-radius: 12px;
+      padding: 2.5%;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 2%;
+      transition: transform 0.3s ease;
+    }
+
+    .operator-card:hover {
+      transform: scale(1.05);
+    }
+
+    .operator-symbol {
+      font-size: 1.8em;
+      font-weight: bold;
+      background: rgba(255,255,255,0.3);
+      padding: 2%;
+      border-radius: 8px;
+      min-width: 50px;
+      text-align: center;
+    }
+
+    .operator-info {
+      flex: 1;
+      font-size: 0.95em;
+    }
+
+    .operator-name {
+      font-size: 1.15em;
+      font-weight: bold;
+      margin-bottom: 0.5%;
+    }
+
+    .formula-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 12px;
+      padding: 2%;
+      margin-bottom: 1%;
+      color: white;
+    }
+
+    .formula-title {
+      font-size: 1.25em;
+      font-weight: bold;
+      margin-bottom: 1.5%;
+      display: flex;
+      align-items: center;
+      gap: 1.5%;
+    }
+
+    .formula-content {
+      background: rgba(255,255,255,0.2);
+      padding: 1.8%;
+      border-radius: 8px;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    .syntax-box {
+      background: rgba(0,0,0,0.3);
+      padding: 1.5%;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 1.1em;
+      margin: 1.5% 0;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .navigation {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1% 2%;
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px;
+      margin-top: 1%;
+      flex-shrink: 0;
+    }
+
+    .nav-button {
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      color: white;
+      border: none;
+      padding: 1% 3%;
+      font-size: 1em;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      font-weight: bold;
+    }
+
+    .nav-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .nav-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .slide-indicator {
+      color: white;
+      font-size: 1em;
+      font-weight: bold;
+      background: rgba(255,255,255,0.2);
+      padding: 1% 2%;
+      border-radius: 8px;
+    }
+
+    .example-box {
+      background: rgba(255,255,255,0.3);
+      padding: 1.5%;
+      border-radius: 8px;
+      margin-top: 1.5%;
+    }
+
+    .example-title {
+      font-weight: bold;
+      margin-bottom: 0.8%;
+      font-size: 1.05em;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2%;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="presentation-container"><!-- Slide 1: Operasi Perhitungan -->
+   <div class="slide active" data-slide="1">
+    <div class="slide-header">
+     <h1 class="slide-title" id="slide1-title">🧮 Jenis-Jenis Operasi Perhitungan di Excel</h1>
+    </div>
+    <div class="slide-content">
+     <div class="operation-grid">
+      <div class="operation-card">
+       <div class="icon">
+        ➕
+       </div>
+       <div class="operation-name">
+        Penjumlahan
+       </div>
+       <div class="operation-symbol">
+        +
+       </div>
+      </div>
+      <div class="operation-card">
+       <div class="icon">
+        ➖
+       </div>
+       <div class="operation-name">
+        Pengurangan
+       </div>
+       <div class="operation-symbol">
+        -
+       </div>
+      </div>
+      <div class="operation-card">
+       <div class="icon">
+        ✖️
+       </div>
+       <div class="operation-name">
+        Perkalian
+       </div>
+       <div class="operation-symbol">
+        *
+       </div>
+      </div>
+      <div class="operation-card">
+       <div class="icon">
+        ➗
+       </div>
+       <div class="operation-name">
+        Pembagian
+       </div>
+       <div class="operation-symbol">
+        /
+       </div>
+      </div>
+      <div class="operation-card">
+       <div class="icon">
+        📈
+       </div>
+       <div class="operation-name">
+        Pemangkatan
+       </div>
+       <div class="operation-symbol">
+        ^
+       </div>
+      </div>
+      <div class="operation-card">
+       <div class="icon">
+        √
+       </div>
+       <div class="operation-name">
+        Pengakaran
+       </div>
+       <div class="operation-symbol">
+        ^(1/2)
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="navigation"><button class="nav-button" onclick="prevSlide()" id="prevBtn">⬅️ Sebelumnya</button>
+     <div class="slide-indicator" id="slideIndicator">
+      Slide 1 / 8
+     </div><button class="nav-button" onclick="nextSlide()" id="nextBtn">Selanjutnya ➡️</button>
+    </div>
+   </div><!-- Slide 2: Operator Logika -->
+   <div class="slide" data-slide="2">
+    <div class="slide-header">
+     <h1 class="slide-title" id="slide2-title">🔍 Jenis-Jenis Operator Logika di Excel</h1>
+    </div>
+    <div class="slide-content">
+     <div class="operator-grid">
+      <div class="operator-card">
+       <div class="operator-symbol">
+        &gt;
+       </div>
+       <div class="operator-info">
+        <div class="operator-name">
+         Lebih Dari
+        </div>
+        <div>
+         Membandingkan apakah nilai kiri lebih besar dari nilai kanan
+        </div>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-symbol">
+        =
+       </div>
+       <div class="operator-info">
+        <div class="operator-name">
+         Sama Dengan
+        </div>
+        <div>
+         Membandingkan apakah dua nilai sama persis
+        </div>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-symbol">
+        &lt;
+       </div>
+       <div class="operator-info">
+        <div class="operator-name">
+         Kurang Dari
+        </div>
+        <div>
+         Membandingkan apakah nilai kiri lebih kecil dari nilai kanan
+        </div>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-symbol">
+        &gt;=
+       </div>
+       <div class="operator-info">
+        <div class="operator-name">
+         Lebih Dari Sama Dengan
+        </div>
+        <div>
+         Nilai kiri lebih besar atau sama dengan nilai kanan
+        </div>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-symbol">
+        &lt;=
+       </div>
+       <div class="operator-info">
+        <div class="operator-name">
+         Kurang Dari Sama Dengan
+        </div>
+        <div>
+         Nilai kiri lebih kecil atau sama dengan nilai kanan
+        </div>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-symbol">
+        &lt;&gt;
+       </div>
+       <div class="operator-info">
+        <div class="operator-name">
+         Tidak Sama Dengan
+        </div>
+        <div>
+         Membandingkan apakah dua nilai berbeda
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="navigation"><button class="nav-button" onclick="prevSlide()" id="prevBtn2">⬅️ Sebelumnya</button>
+     <div class="slide-indicator" id="slideIndicator2">
+      Slide 2 / 8
+     </div><button class="nav-button" onclick="nextSlide()" id="nextBtn2">Selanjutnya ➡️</button>
+    </div>
+   </div><!-- Slide 3: SUM -->
+   <div class="slide" data-slide="3">
+    <div class="slide-header">
+     <h1 class="slide-title" id="slide3-title">➕ Rumus SUM (Penjumlahan)</h1>
+    </div>
+    <div class="slide-content">
+     <div class="formula-section">
+      <div class="formula-title">
+       📖 Definisi
+      </div>
+      <div class="formula-content">
+       SUM adalah rumus untuk <strong>menjumlahkan</strong> angka-angka. Bayangkan kamu punya banyak uang di berbagai tempat, SUM akan menghitung total semua uangmu!
+      </div>
+     </div>
+     <div class="formula-section">
+      <div class="formula-title">
+       ✍️ Sintaksis Rumus
+      </div>
+      <div class="syntax-box">
+       =SUM(angka1, angka2, ...)
+      </div>
+      <div class="formula-content">
+       atau
+      </div>
+      <div class="syntax-box">
+       =SUM(sel_awal:sel_akhir)
+      </div>
+     </div>
+     <div class="formula-section">
+      <div class="formula-title">
+       🔍 Bedah Sintaksis
+      </div>
+      <div class="formula-content"><strong>=</strong> → Setiap rumus Excel harus diawali tanda sama dengan<br><strong>SUM</strong> → Nama rumusnya (dari kata "Sum" = Jumlah)<br><strong>(angka1, angka2, ...)</strong> → Angka-angka yang mau dijumlahkan<br><strong>(A1:A10)</strong> → Atau bisa juga rentang sel dari A1 sampai A10 
+       <div class="example-box">
+        <div class="example-title">
+         💡 Contoh Mudah:
+        </div><strong>=SUM(5, 10, 15)</strong> → Hasilnya 30<br><strong>=SUM(A1:A5)</strong> → Menjumlahkan semua angka dari sel A1 sampai A5
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="navigation"><button class="nav-button" onclick="prevSlide()">⬅️ Sebelumnya</button>
+     <div class="slide-indicator">
+      Slide 3 / 8
+     </div><button class="nav-button" onclick="nextSlide()">Selanjutnya ➡️</button>
+    </div>
+   </div><!-- Slide 4: COUNT -->
+   <div class="slide" data-slide="4">
+    <div class="slide-header">
+     <h1 class="slide-title" id="slide4-title">���� Rumus COUNT (Menghitung Angka)</h1>
+    </div>
+    <div class="slide-content">
+     <div class="formula-section">
+      <div class="formula-title">
+       📖 Definisi
+      </div>
+      <div class="formula-content">
+       COUNT adalah rumus untuk <strong>menghitung berapa banyak sel yang berisi angka</strong>. Seperti menghitung berapa banyak kelereng yang kamu punya!
+      </div>
+     </div>
+     <div class="formula-section">
+      <div class="formula-title">
+       ✍️ Sintaksis Rumus
+      </div>
+      <div class="syntax-box">
+       =COUNT(sel_awal:sel_akhir)
+      </div>
+     </div>
+     <div class="formula-section">
+      <div class="formula-title">
+       🔍 Bedah Sintaksis
+      </div>
+      <div class="formula-content"><strong>=</strong> → Tanda wajib di awal rumus<br><strong>COUNT</strong> → Nama rumusnya (dari kata "Count" = Hitung)<br><strong>(A1:A10)</strong> → Rentang sel yang mau dihitung 
+       <div class="example-box">
+        <div class="example-title">
+         💡 Contoh Mudah:
+        </div> Kalau di sel A1 sampai A5 ada: 10, 20, "halo", 30, (kosong)<br><strong>=COUNT(A1:A5)</strong> → Hasilnya 3 (hanya menghitung 10, 20, 30)<br><em>*Catatan: Teks "halo" dan sel kosong tidak dihitung!</em>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="navigation"><button class="nav-button" onclick="prevSlide()">⬅️ Sebelumnya</button>
+     <div class="slide-indicator">
+      Slide 4 / 8
+     </div><button class="nav-button" onclick="nextSlide()">Selanjutnya ➡️</button>
+    </div>
+   </div><!-- Slide 5: COUNTA -->
+   <div class="slide" data-slide="5">
+    <div class="slide-header">
+     <h1 class="slide-title" id="slide5-title">📝 Rumus COUNTA (Menghitung Isi)</h1>
+    </div>
+    <div class="slide-content">
+     <div class="formula-section">
+      <div class="formula-title">
+       📖 Definisi
+      </div>
+      <div class="formula-content">
+       COUNTA adalah rumus untuk <strong>menghitung berapa banyak sel yang tidak kosong</strong> (bisa angka, teks, atau apapun). Seperti menghitung berapa banyak kotak yang sudah terisi!
+      </div>
+     </div>
+     <div class="formula-section">
+      <div class="formula-title">
+       ✍️ Sintaksis Rumus
+      </div>
+      <div class="syntax-box">
+       =COUNTA(sel_awal:sel_akhir)
+      </div>
+     </div>
+     <div class="formula-section">
+      <div class="formula-title">
+       🔍 Bedah Sintaksis
+      </div>
+      <div class="formula-content"><strong>=</strong> → Tanda wajib di awal rumus<br><strong>COUNTA</strong> → Nama rumusnya (Count + A = Hitung Semua)<br><strong>(A1:A10)</strong> → Rentang sel yang mau dihitung 
+       <div class="example-box">
+        <div class="example-title">
+         💡 Contoh Mudah:
+        </div> Kalau di sel A1 sampai A5 ada: 10, 20, "halo", 30, (kosong)<br><strong>=COUNTA(A1:A5)</strong> → Hasilnya 4<br><em>*Dihitung: 10, 20, "halo", 30. Yang kosong tidak dihitung!</em>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="navigation"><button class="nav-button" onclick="prevSlide()">⬅️ Sebelumnya</button>
+     <div class="slide-indicator">
+      Slide 5 / 8
+     </div><button class="nav-button" onclick="nextSlide()">Selanjutnya ➡️</button>
+    </div>
+   </div><!-- Slide 6: COUNTBLANK -->
+   <div class="slide" data-slide="6">
+    <div class="slide-header">
+     <h1 class="slide-title" id="slide6-title">�� Rumus COUNTBLANK (Menghitung Kosong)</h1>
+    </div>
+    <div class="slide-content">
+     <div class="formula-section">
+      <div class="formula-title">
+       📖 Definisi
+      </div>
+      <div class="formula-content">
+       COUNTBLANK adalah rumus untuk <strong>menghitung berapa banyak sel yang kosong</strong>. Seperti menghitung berapa banyak kursi yang masih kosong di kelas!
+      </div>
+     </div>
+     <div class="formula-section">
+      <div class="formula-title">
+       ✍️ Sintaksis Rumus
+      </div>
+      <div class="syntax-box">
+       =COUNTBLANK(sel_awal:sel_akhir)
+      </div>
+     </div>
+     <div class="formula-section">
+      <div class="formula-title">
+       🔍 Bedah Sintaksis
+      </div>
+      <div class="formula-content"><strong>=</strong> → Tanda wajib di awal rumus<br><strong>COUNTBLANK</strong> → Nama rumusnya (Count + Blank = Hitung yang Kosong)<br><strong>(A1:A10)</strong> → Rentang sel yang mau dihitung 
+       <div class="example-box">
+        <div class="example-title">
+         💡 Contoh Mudah:
+        </div> Kalau di sel A1 sampai A5 ada: 10, (kosong), "halo", (kosong), 30<br><strong>=COUNTBLANK(A1:A5)</strong> → Hasilnya 2<br><em>*Hanya menghitung sel yang benar-benar kosong!</em>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="navigation"><button class="nav-button" onclick="prevSlide()">⬅️ Sebelumnya</button>
+     <div class="slide-indicator">
+      Slide 6 / 8
+     </div><button class="nav-button" onclick="nextSlide()">Selanjutnya ➡️</button>
+    </div>
+   </div><!-- Slide 7: AVERAGE -->
+   <div class="slide" data-slide="7">
+    <div class="slide-header">
+     <h1 class="slide-title" id="slide7-title">📊 Rumus AVERAGE (Rata-Rata)</h1>
+    </div>
+    <div class="slide-content">
+     <div class="formula-section">
+      <div class="formula-title">
+       📖 Definisi
+      </div>
+      <div class="formula-content">
+       AVERAGE adalah rumus untuk <strong>menghitung nilai rata-rata</strong> dari beberapa angka. Seperti menghitung nilai rata-rata ulanganmu!
+      </div>
+     </div>
+     <div class="formula-section">
+      <div class="formula-title">
+       ✍️ Sintaksis Rumus
+      </div>
+      <div class="syntax-box">
+       =AVERAGE(sel_awal:sel_akhir)
+      </div>
+     </div>
+     <div class="formula-section">
+      <div class="formula-title">
+       🔍 Bedah Sintaksis
+      </div>
+      <div class="formula-content"><strong>=</strong> → Tanda wajib di awal rumus<br><strong>AVERAGE</strong> → Nama rumusnya (dari kata "Average" = Rata-rata)<br><strong>(A1:A10)</strong> → Rentang sel yang mau dihitung rata-ratanya 
+       <div class="example-box">
+        <div class="example-title">
+         💡 Contoh Mudah:
+        </div> Kalau di sel A1 sampai A3 ada: 80, 90, 100<br><strong>=AVERAGE(A1:A3)</strong> → Hasilnya 90<br><em>*Cara hitungnya: (80 + 90 + 100) ÷ 3 = 90</em>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="navigation"><button class="nav-button" onclick="prevSlide()">⬅️ Sebelumnya</button>
+     <div class="slide-indicator">
+      Slide 7 / 8
+     </div><button class="nav-button" onclick="nextSlide()">Selanjutnya ➡️</button>
+    </div>
+   </div><!-- Slide 8: MAX & MIN -->
+   <div class="slide" data-slide="8">
+    <div class="slide-header">
+     <h1 class="slide-title" id="slide8-title">🏆 Rumus MAX &amp; MIN</h1>
+    </div>
+    <div class="slide-content">
+     <div class="two-column">
+      <div>
+       <div class="formula-section">
+        <div class="formula-title">
+         📖 Definisi MAX
+        </div>
+        <div class="formula-content">
+         MAX adalah rumus untuk <strong>mencari angka terbesar</strong> dari sekumpulan angka. Seperti mencari siapa yang paling tinggi di kelasmu!
+        </div>
+       </div>
+       <div class="formula-section">
+        <div class="formula-title">
+         ✍️ Sintaksis Rumus
+        </div>
+        <div class="syntax-box">
+         =MAX(sel_awal:sel_akhir)
+        </div>
+       </div>
+       <div class="formula-section">
+        <div class="formula-title">
+         🔍 Bedah Sintaksis
+        </div>
+        <div class="formula-content"><strong>=</strong> → Tanda wajib di awal<br><strong>MAX</strong> → Maximum (Maksimum/Terbesar)<br><strong>(A1:A10)</strong> → Rentang sel 
+         <div class="example-box">
+          <div class="example-title">
+           💡 Contoh:
+          </div> Sel A1:A3 → 50, 80, 65<br><strong>=MAX(A1:A3)</strong> → 80
+         </div>
+        </div>
+       </div>
+      </div>
+      <div>
+       <div class="formula-section">
+        <div class="formula-title">
+         📖 Definisi MIN
+        </div>
+        <div class="formula-content">
+         MIN adalah rumus untuk <strong>mencari angka terkecil</strong> dari sekumpulan angka. Seperti mencari siapa yang paling pendek di kelasmu!
+        </div>
+       </div>
+       <div class="formula-section">
+        <div class="formula-title">
+         ✍️ Sintaksis Rumus
+        </div>
+        <div class="syntax-box">
+         =MIN(sel_awal:sel_akhir)
+        </div>
+       </div>
+       <div class="formula-section">
+        <div class="formula-title">
+         🔍 Bedah Sintaksis
+        </div>
+        <div class="formula-content"><strong>=</strong> → Tanda wajib di awal<br><strong>MIN</strong> → Minimum (Minimum/Terkecil)<br><strong>(A1:A10)</strong> → Rentang sel 
+         <div class="example-box">
+          <div class="example-title">
+           💡 Contoh:
+          </div> Sel A1:A3 → 50, 80, 65<br><strong>=MIN(A1:A3)</strong> → 50
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="navigation"><button class="nav-button" onclick="prevSlide()">⬅️ Sebelumnya</button>
+     <div class="slide-indicator">
+      Slide 8 / 8
+     </div><button class="nav-button" onclick="nextSlide()">Selanjutnya ➡️</button>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      background_color: "#667eea",
+      card_color: "#ffffff",
+      primary_green: "#11998e",
+      accent_pink: "#f093fb",
+      text_color: "#333333",
+      font_family: "Segoe UI",
+      font_size: 16,
+      presentation_title: "Materi Excel",
+      slide1_title: "🧮 Jenis-Jenis Operasi Perhitungan di Excel",
+      slide2_title: "🔍 Jenis-Jenis Operator Logika di Excel",
+      slide3_title: "➕ Rumus SUM (Penjumlahan)",
+      slide4_title: "🔢 Rumus COUNT (Menghitung Angka)",
+      slide5_title: "📝 Rumus COUNTA (Menghitung Isi)",
+      slide6_title: "⬜ Rumus COUNTBLANK (Menghitung Kosong)",
+      slide7_title: "📊 Rumus AVERAGE (Rata-Rata)",
+      slide8_title: "🏆 Rumus MAX & MIN"
+    };
+
+    let currentSlide = 1;
+    const totalSlides = 8;
+
+    function updateSlide() {
+      const slides = document.querySelectorAll('.slide');
+      slides.forEach((slide, index) => {
+        if (index + 1 === currentSlide) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+
+      const indicators = document.querySelectorAll('.slide-indicator');
+      indicators.forEach(indicator => {
+        indicator.textContent = `Slide ${currentSlide} / ${totalSlides}`;
+      });
+
+      const prevButtons = document.querySelectorAll('.nav-button:first-child');
+      const nextButtons = document.querySelectorAll('.nav-button:last-child');
+      
+      prevButtons.forEach(btn => {
+        btn.disabled = currentSlide === 1;
+      });
+      
+      nextButtons.forEach(btn => {
+        btn.disabled = currentSlide === totalSlides;
+      });
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    async function onConfigChange(config) {
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseSize = config.font_size || defaultConfig.font_size;
+      const baseFontStack = 'Tahoma, Geneva, Verdana, sans-serif';
+
+      document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      document.body.style.background = `linear-gradient(135deg, ${config.background_color || defaultConfig.background_color} 0%, #764ba2 100%)`;
+
+      const slideTitles = document.querySelectorAll('.slide-title');
+      slideTitles.forEach(title => {
+        title.style.fontSize = `${baseSize * 1.8}px`;
+        title.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      });
+
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        card.style.backgroundColor = config.card_color || defaultConfig.card_color;
+      });
+
+      const operationCards = document.querySelectorAll('.operation-card');
+      operationCards.forEach(card => {
+        card.style.background = `linear-gradient(135deg, ${config.primary_green || defaultConfig.primary_green} 0%, #38ef7d 100%)`;
+      });
+
+      const operatorCards = document.querySelectorAll('.operator-card');
+      operatorCards.forEach(card => {
+        card.style.background = `linear-gradient(135deg, ${config.accent_pink || defaultConfig.accent_pink} 0%, #f5576c 100%)`;
+      });
+
+      const navButtons = document.querySelectorAll('.nav-button');
+      navButtons.forEach(btn => {
+        btn.style.background = `linear-gradient(135deg, ${config.primary_green || defaultConfig.primary_green} 0%, #38ef7d 100%)`;
+        btn.style.fontSize = `${baseSize}px`;
+      });
+
+      const formulaSections = document.querySelectorAll('.formula-section');
+      formulaSections.forEach(section => {
+        section.style.fontSize = `${baseSize}px`;
+      });
+
+      document.getElementById('slide1-title').textContent = config.slide1_title || defaultConfig.slide1_title;
+      document.getElementById('slide2-title').textContent = config.slide2_title || defaultConfig.slide2_title;
+      document.getElementById('slide3-title').textContent = config.slide3_title || defaultConfig.slide3_title;
+      document.getElementById('slide4-title').textContent = config.slide4_title || defaultConfig.slide4_title;
+      document.getElementById('slide5-title').textContent = config.slide5_title || defaultConfig.slide5_title;
+      document.getElementById('slide6-title').textContent = config.slide6_title || defaultConfig.slide6_title;
+      document.getElementById('slide7-title').textContent = config.slide7_title || defaultConfig.slide7_title;
+      document.getElementById('slide8-title').textContent = config.slide8_title || defaultConfig.slide8_title;
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig: defaultConfig,
+        onConfigChange: onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.card_color || defaultConfig.card_color,
+              set: (value) => {
+                config.card_color = value;
+                window.elementSdk.setConfig({ card_color: value });
+              }
+            },
+            {
+              get: () => config.primary_green || defaultConfig.primary_green,
+              set: (value) => {
+                config.primary_green = value;
+                window.elementSdk.setConfig({ primary_green: value });
+              }
+            },
+            {
+              get: () => config.accent_pink || defaultConfig.accent_pink,
+              set: (value) => {
+                config.accent_pink = value;
+                window.elementSdk.setConfig({ accent_pink: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              config.font_size = value;
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["presentation_title", config.presentation_title || defaultConfig.presentation_title],
+          ["slide1_title", config.slide1_title || defaultConfig.slide1_title],
+          ["slide2_title", config.slide2_title || defaultConfig.slide2_title],
+          ["slide3_title", config.slide3_title || defaultConfig.slide3_title],
+          ["slide4_title", config.slide4_title || defaultConfig.slide4_title],
+          ["slide5_title", config.slide5_title || defaultConfig.slide5_title],
+          ["slide6_title", config.slide6_title || defaultConfig.slide6_title],
+          ["slide7_title", config.slide7_title || defaultConfig.slide7_title],
+          ["slide8_title", config.slide8_title || defaultConfig.slide8_title]
+        ])
+      });
+    }
+
+    updateSlide();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a0c089e3748fd40',t:'MTc2MzUxNjc4NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
